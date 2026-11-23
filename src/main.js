@@ -2,10 +2,10 @@ import { diffBaselines, hasDifferences, readBaseline, toPolicy, validateBaseline
 import { baselineFromProbe, probeServer } from './probe.js';
 
 const USAGE = `usage:
-  agenticmart-baseline fetch <type>/<slug> [--out file] [--force]
-  agenticmart-baseline probe [--out file] [--force] [--timeout ms] [--name n] [--repo r] [--commit c] -- <command...>
-  agenticmart-baseline diff <old> <new> [--json]
-  agenticmart-baseline to-policy <baseline> [--out file] [--force]
+  agxmart-baseline fetch <type>/<slug> [--out file] [--force]
+  agxmart-baseline probe [--out file] [--force] [--timeout ms] [--name n] [--repo r] [--commit c] -- <command...>
+  agxmart-baseline diff <old> <new> [--json]
+  agxmart-baseline to-policy <baseline> [--out file] [--force]
 exit codes: 0 ok, 1 differences found (diff only), 2 error
 `;
 
@@ -44,7 +44,7 @@ function write(file, value, force, what) {
 async function fetchCmd(ref, flags) {
   const m = /^(mcp|agent|skill)\/(.+)$/.exec(ref ?? '');
   if (!m) throw new UsageError('expected <type>/<slug> where type is mcp, agent or skill');
-  const base = (process.env.AGENTICMART_API || 'https://agenticmart.org').replace(/\/+$/, '');
+  const base = ((process.env.AGXMART_API || process.env.AGENTICMART_API) || 'https://agxmart.com').replace(/\/+$/, '');
   const url = `${base}/api/v1/baseline/${m[1]}/${encodeURIComponent(m[2])}`;
   const res = await fetch(url, { signal: AbortSignal.timeout(15000), headers: { accept: 'application/json' } });
   if (!res.ok) throw new Error(`API returned HTTP ${res.status} for ${url}`);
@@ -112,7 +112,7 @@ export async function main(argv) {
     else throw new UsageError(`unknown command ${cmd}`);
     process.exitCode = code;
   } catch (e) {
-    process.stderr.write(`agenticmart-baseline: ${e.message}\n${e instanceof UsageError ? USAGE : ''}`);
+    process.stderr.write(`agxmart-baseline: ${e.message}\n${e instanceof UsageError ? USAGE : ''}`);
     process.exitCode = 2;
   }
 }

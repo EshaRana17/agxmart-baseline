@@ -5,7 +5,7 @@ import { startServer, killTree } from './spawn.js';
 
 const LEGACY_VERSION = '2025-11-25';
 const STATELESS_VERSION = '2026-07-28';
-const CLIENT = { name: 'agenticmart-baseline', version: '0.1.0' };
+const CLIENT = { name: 'agxmart-baseline', version: '0.1.0' };
 const MAX_PAGES = 100;
 
 export function sha256(text) {
@@ -102,7 +102,7 @@ export function baselineFromProbe(command, probed, { name, repo = null, commit =
     .map((t) => ({ name: t.name, descriptionSha256: sha256(typeof t.description === 'string' ? t.description : '') }))
     .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
   return {
-    schema: 'agenticmart.baseline/v0',
+    schema: 'agxmart.baseline/v0',
     subject: { name: name ?? probed.serverName ?? path.basename(command[0]), repo, commit },
     generatedAt: new Date().toISOString(),
     source: 'local-probe',

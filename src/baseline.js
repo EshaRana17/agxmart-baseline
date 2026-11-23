@@ -1,10 +1,11 @@
 import fs from 'node:fs';
 
-export const SCHEMA = 'agenticmart.baseline/v0';
+export const SCHEMA = 'agxmart.baseline/v0';
 
 export function validateBaseline(b) {
   if (typeof b !== 'object' || b === null || Array.isArray(b)) throw new Error('baseline must be a JSON object');
-  if (b.schema !== SCHEMA) throw new Error(`unsupported schema ${JSON.stringify(b.schema)}, expected ${SCHEMA}`);
+  // Baselines saved before the rename use the old id; both are the same format.
+  if (b.schema !== SCHEMA && b.schema !== 'agenticmart.baseline/v0') throw new Error(`unsupported schema ${JSON.stringify(b.schema)}, expected ${SCHEMA}`);
   if (typeof b.subject !== 'object' || b.subject === null) throw new Error('baseline has no subject');
   if (!Array.isArray(b.observed?.tools)) throw new Error('baseline has no observed.tools array');
   if (!Array.isArray(b.observed?.hosts)) throw new Error('baseline has no observed.hosts array');

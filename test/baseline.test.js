@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const BIN = path.join(here, '..', 'bin', 'agenticmart-baseline.js');
+const BIN = path.join(here, '..', 'bin', 'agxmart-baseline.js');
 const FAKE = path.join(here, 'fixtures', 'fake-server.fixture');
 const sha = (s) => crypto.createHash('sha256').update(s).digest('hex');
 const tmp = () => fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-test-'));
@@ -27,7 +27,7 @@ function run(args, env = {}) {
 
 function make(tools, coverage = {}) {
   return {
-    schema: 'agenticmart.baseline/v0',
+    schema: 'agxmart.baseline/v0',
     subject: { name: 'x', repo: null, commit: null },
     generatedAt: '2026-01-01T00:00:00Z',
     source: 'local-probe',
@@ -62,7 +62,7 @@ test('probe lists tools over the legacy handshake, writes a baseline and stops t
   const r = await run(['probe', '--out', out, '--', process.execPath, FAKE], { FAKE_PID_FILE: pidFile, FAKE_CALLS: callsFile });
   assert.equal(r.code, 0, r.stderr);
   const b = JSON.parse(fs.readFileSync(out, 'utf8'));
-  assert.equal(b.schema, 'agenticmart.baseline/v0');
+  assert.equal(b.schema, 'agxmart.baseline/v0');
   assert.equal(b.source, 'local-probe');
   assert.equal(b.subject.name, 'fake-server');
   assert.deepEqual(b.observed.tools.map((t) => t.name), ['delete_all', 'read_file', 'write_file']);
@@ -102,7 +102,7 @@ test('probe times out, writes nothing and stops the server', async () => {
 
 test('probe reports a server that cannot start', async () => {
   const dir = tmp();
-  const r = await run(['probe', '--out', path.join(dir, 'b.json'), '--', 'agenticmart-no-such-binary-xyz']);
+  const r = await run(['probe', '--out', path.join(dir, 'b.json'), '--', 'agxmart-no-such-binary-xyz']);
   assert.equal(r.code, 2);
   assert.match(r.stderr, /could not start/);
 });
@@ -190,7 +190,7 @@ test('fetch writes the baseline returned by the API', async () => {
   const body = make({ a: '1' });
   let seen;
   const { server, url } = await serve((req, res) => { seen = req.url; res.end(JSON.stringify(body)); });
-  const r = await run(['fetch', 'mcp/some-slug', '--out', out], { AGENTICMART_API: url });
+  const r = await run(['fetch', 'mcp/some-slug', '--out', out], { AGXMART_API: url });
   server.close();
   assert.equal(r.code, 0, r.stderr);
   assert.equal(seen, '/api/v1/baseline/mcp/some-slug');
@@ -201,7 +201,7 @@ test('fetch rejects a response in the wrong format', async () => {
   const dir = tmp();
   const out = path.join(dir, 'b.json');
   const { server, url } = await serve((req, res) => res.end('{"schema":"something/else"}'));
-  const r = await run(['fetch', 'mcp/x', '--out', out], { AGENTICMART_API: url });
+  const r = await run(['fetch', 'mcp/x', '--out', out], { AGXMART_API: url });
   server.close();
   assert.equal(r.code, 2);
   assert.equal(fs.existsSync(out), false);
@@ -209,7 +209,7 @@ test('fetch rejects a response in the wrong format', async () => {
 
 test('fetch reports HTTP errors', async () => {
   const { server, url } = await serve((req, res) => { res.statusCode = 404; res.end('{}'); });
-  const r = await run(['fetch', 'mcp/missing', '--out', path.join(tmp(), 'b')], { AGENTICMART_API: url });
+  const r = await run(['fetch', 'mcp/missing', '--out', path.join(tmp(), 'b')], { AGXMART_API: url });
   server.close();
   assert.equal(r.code, 2);
   assert.match(r.stderr, /404/);
