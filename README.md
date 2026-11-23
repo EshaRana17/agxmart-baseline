@@ -19,7 +19,7 @@ agxmart-baseline diff <old> <new> [--json]
 agxmart-baseline to-policy <baseline> [--out file] [--force]
 ```
 
-- `fetch` downloads a baseline from the AGXMart API. Set `AGXMART_API` to change the base URL.
+- `fetch` downloads a baseline from the AGXmart API. Set `AGXMART_API` to change the base URL.
 - `probe` starts the local stdio server you name, lists its tools, writes a baseline with source `local-probe`, and stops the server. It tries the `initialize` handshake first, then falls back to stateless requests carrying `_meta` (MCP revision 2026-07-28) if the server rejects it.
 - `diff` reports added, removed and changed tools. Exit codes: 0 no differences, 1 differences, 2 error.
 - `to-policy` writes a policy for [agxmart-guard](https://github.com/EshaRana17/agxmart-guard) with an allow list, expected hashes, `onToolListChange` set to `block`, and starting limits of 60 calls a minute, 5 identical calls and 1000 total. Adjust them for your workload.
@@ -51,7 +51,7 @@ wrote guard policy to policy.json
 - `probe` runs the command you give it on your machine, with your permissions. Only probe servers you are willing to start.
 - `probe` does not observe network hosts, so its `hosts` list is always empty.
 - A server can return a different list at another time or to another client. Hashes cover the description text only, not input schemas or tool behavior.
-- Baselines from the API depend on AGXMart hashing descriptions the same way, as SHA-256 of the UTF-8 description text.
+- Baselines from the API depend on AGXmart hashing descriptions the same way, as SHA-256 of the UTF-8 description text.
 
 ## Tests
 
@@ -65,4 +65,4 @@ node --test
 
 MIT
 
-Developed by [buildwithesha.web.app](https://buildwithesha.web.app/) for [AGXMart](https://agxmart.com)
+Developed by [buildwithesha.web.app](https://buildwithesha.web.app/) for [AGXmart](https://agxmart.com)

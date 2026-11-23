@@ -1,7 +1,7 @@
 {
   "name": "agxmart-baseline",
   "version": "0.1.0",
-  "description": "Record, compare and convert MCP tool baselines from the AGXMart API or a local probe.",
+  "description": "Record, compare and convert MCP tool baselines from the AGXmart API or a local probe.",
   "type": "module",
   "bin": {
     "agxmart-baseline": "bin/agxmart-baseline.js"
